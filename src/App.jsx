@@ -37,32 +37,28 @@ export default function Home() {
         <button className="logout">Cerrar sesión</button>
       </aside>
 
-      {/* Panel Derecho */}
-      <main className="main-content">
-        <h2>DOCUMENTOS PARA PRÁCTICAS PROFESIONALES</h2>
+       <div className="main-content">
+        <h1>DOCUMENTOS PARA PRÁCTICAS PROFESIONALES</h1>
 
-        <div className="document-list">
-          <div className="document">
-            <span>CARTA A</span>
-            <button className="primary">Carta de Presentación</button>
+        <div className="documents">
+          <div>
+            <p>CARTA A</p>
+            <button className="active">Carta de Presentación</button>
           </div>
-
-          <div className="document">
-            <span>CARTA B</span>
-            <button>Carta de Aceptación</button>
+          <div>
+            <p>CARTA B</p>
+            <button disabled>Carta de Aceptación</button>
           </div>
-
-          <div className="document">
-            <span>CARTA C</span>
-            <button>Carta de Cumplimiento</button>
+          <div>
+            <p>CARTA C</p>
+            <button disabled>Carta de Cumplimiento</button>
           </div>
-
-          <div className="document">
-            <span>CARTA D</span>
-            <button>Carta de Liberación</button>
+          <div>
+            <p>CARTA D</p>
+            <button disabled>Carta de Liberación</button>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
