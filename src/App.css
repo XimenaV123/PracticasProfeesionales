@@ -1,0 +1,118 @@
+/* Contenedor general */
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: #f4f5f7;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Panel izquierdo */
+.sidebar {
+  width: 25%;
+  background-color: #1c1f3b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+}
+
+.profile {
+  text-align: center;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.info p {
+  font-size: 0.85rem;
+  margin: 0.3rem 0;
+  text-align: left;
+}
+
+/* Menú inferior */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu button {
+  background-color: #2c315b;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.menu button:hover {
+  background-color: #3c4271;
+}
+
+.logout {
+  background-color: #a74c4c;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #d85c5c;
+}
+
+/* Panel derecho */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  text-align: center;
+}
+
+.main-content h2 {
+  color: #1c1f3b;
+  margin-bottom: 2rem;
+}
+
+.document-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.document {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+}
+
+.document span {
+  font-weight: bold;
+  color: #1c1f3b;
+}
+
+.document button {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ccc;
+  color: white;
+  width: 60%;
+}
+
+.document button.primary {
+  background-color: #1c3b6b;
+}
+
+.document button:hover {
+  opacity: 0.9;
+}
