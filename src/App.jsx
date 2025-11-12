@@ -40,22 +40,22 @@ export default function Home() {
        <div className="main-content">
         <h1>DOCUMENTOS PARA PRÁCTICAS PROFESIONALES</h1>
 
-        <div className="documents">
-          <div>
-            <p>CARTA A</p>
-            <button className="active">Carta de Presentación</button>
+        <div className="document-list">
+          <div className="document">
+            <span>CARTA A</span>
+            <button  className="primary">Carta de Presentación</button>
           </div>
-          <div>
-            <p>CARTA B</p>
-            <button disabled>Carta de Aceptación</button>
+          <div className="document">
+            <span>CARTA B</span>
+            <button  className="primary">Carta de Aceptación</button>
           </div>
-          <div>
-            <p>CARTA C</p>
-            <button disabled>Carta de Cumplimiento</button>
+          <div className="document">
+            <span>CARTA C</span>
+            <button  className="primary">Carta de Cumplimiento</button>
           </div>
-          <div>
-            <p>CARTA D</p>
-            <button disabled>Carta de Liberación</button>
+          <div className="document">
+            <span>CARTA D</span>
+            <button  className="primary">Carta de Liberación</button>
           </div>
         </div>
       </div>
