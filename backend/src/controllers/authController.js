@@ -178,3 +178,169 @@ export const register = async (req, res) => {
   }
 };
 
+/**
+ * Solicitar recuperación de contraseña
+ */
+export const solicitarRecuperacion = async (req, res) => {
+  try {
+    const { expediente, email } = req.body;
+
+    if (!expediente || !email) {
+      return res.status(400).json({ 
+        error: 'Expediente y email son requeridos' 
+      });
+    }
+
+    // Verificar que el usuario existe y el email coincide
+    const { data: user, error: userError } = await supabase
+      .from('usuarios')
+      .select('id, expediente, email, nombre')
+      .eq('expediente', expediente)
+      .eq('email', email)
+      .single();
+
+    if (userError || !user) {
+      // Por seguridad, no revelamos si el usuario existe o no
+      return res.json({
+        message: 'Si el expediente y email son correctos, recibirás un enlace de recuperación'
+      });
+    }
+
+    // Generar token de recuperación (válido por 1 hora)
+    const resetToken = jwt.sign(
+      { 
+        userId: user.id, 
+        tipo: 'password_reset' 
+      },
+      process.env.JWT_SECRET || 'tu-secret-key-cambiar-en-produccion',
+      { expiresIn: '1h' }
+    );
+
+    // Guardar token en la base de datos
+    const { error: updateError } = await supabase
+      .from('usuarios')
+      .update({ 
+        reset_token: resetToken,
+        reset_token_expires: new Date(Date.now() + 3600000).toISOString() // 1 hora
+      })
+      .eq('id', user.id);
+
+    if (updateError) {
+      console.error('Error al guardar token de recuperación:', updateError);
+      return res.status(500).json({ 
+        error: 'Error al procesar la solicitud' 
+      });
+    }
+
+    // En producción, aquí enviarías un email con el token
+    // Por ahora, retornamos el token (solo para desarrollo)
+    // En producción, eliminar esta línea y enviar email
+    if (process.env.NODE_ENV === 'development') {
+      return res.json({
+        message: 'Token de recuperación generado (solo desarrollo)',
+        resetToken: resetToken // Eliminar en producción
+      });
+    }
+
+    res.json({
+      message: 'Si el expediente y email son correctos, recibirás un enlace de recuperación'
+    });
+  } catch (error) {
+    console.error('Error en solicitarRecuperacion:', error);
+    res.status(500).json({ 
+      error: 'Error interno del servidor' 
+    });
+  }
+};
+
+/**
+ * Restablecer contraseña con token
+ */
+export const restablecerContraseña = async (req, res) => {
+  try {
+    const { token, nuevaContraseña } = req.body;
+
+    if (!token || !nuevaContraseña) {
+      return res.status(400).json({ 
+        error: 'Token y nueva contraseña son requeridos' 
+      });
+    }
+
+    if (nuevaContraseña.length < 6) {
+      return res.status(400).json({ 
+        error: 'La contraseña debe tener al menos 6 caracteres' 
+      });
+    }
+
+    // Verificar token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu-secret-key-cambiar-en-produccion');
+      
+      if (decoded.tipo !== 'password_reset') {
+        return res.status(400).json({ 
+          error: 'Token inválido' 
+        });
+      }
+    } catch (error) {
+      return res.status(400).json({ 
+        error: 'Token inválido o expirado' 
+      });
+    }
+
+    // Verificar que el token existe en la base de datos y no ha expirado
+    const { data: user, error: userError } = await supabase
+      .from('usuarios')
+      .select('id, reset_token, reset_token_expires')
+      .eq('id', decoded.userId)
+      .single();
+
+    if (userError || !user) {
+      return res.status(400).json({ 
+        error: 'Token inválido' 
+      });
+    }
+
+    if (user.reset_token !== token) {
+      return res.status(400).json({ 
+        error: 'Token inválido' 
+      });
+    }
+
+    if (new Date(user.reset_token_expires) < new Date()) {
+      return res.status(400).json({ 
+        error: 'Token expirado' 
+      });
+    }
+
+    // Hash de la nueva contraseña
+    const hashedPassword = await bcrypt.hash(nuevaContraseña, 10);
+
+    // Actualizar contraseña y limpiar token
+    const { error: updateError } = await supabase
+      .from('usuarios')
+      .update({
+        contraseña: hashedPassword,
+        reset_token: null,
+        reset_token_expires: null
+      })
+      .eq('id', user.id);
+
+    if (updateError) {
+      console.error('Error al actualizar contraseña:', updateError);
+      return res.status(500).json({ 
+        error: 'Error al restablecer la contraseña' 
+      });
+    }
+
+    res.json({
+      message: 'Contraseña restablecida exitosamente'
+    });
+  } catch (error) {
+    console.error('Error en restablecerContraseña:', error);
+    res.status(500).json({ 
+      error: 'Error interno del servidor' 
+    });
+  }
+};
+

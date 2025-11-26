@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
   email VARCHAR(255) UNIQUE NOT NULL,
   fechaNacimiento DATE,
   rol VARCHAR(20) DEFAULT 'estudiante' CHECK (rol IN ('estudiante', 'coordinador', 'admin')),
+  reset_token TEXT,
+  reset_token_expires TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -26,11 +28,13 @@ CREATE TABLE IF NOT EXISTS cartas (
   tipo VARCHAR(1) NOT NULL CHECK (tipo IN ('A', 'B', 'C', 'D')),
   empresa VARCHAR(255) NOT NULL,
   datos_adicionales JSONB DEFAULT '{}',
-  estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'enviada', 'revisada', 'aprobada', 'rechazada')),
+  estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'enviando', 'en_proceso', 'recibido', 'revisada', 'aprobada', 'rechazada')),
   fecha_creacion TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   fecha_envio TIMESTAMP WITH TIME ZONE,
   fecha_revision TIMESTAMP WITH TIME ZONE,
   comentarios TEXT,
+  archivo_url TEXT,
+  archivo_nombre VARCHAR(255),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -62,6 +66,31 @@ CREATE TRIGGER update_cartas_updated_at BEFORE UPDATE ON cartas
 COMMENT ON TABLE usuarios IS 'Tabla de usuarios del sistema (estudiantes, coordinadores, administradores)';
 COMMENT ON TABLE cartas IS 'Tabla de cartas para prácticas profesionales (A: Presentación, B: Aceptación, C: Cumplimiento, D: Liberación)';
 
+-- Tabla de notificaciones
+CREATE TABLE IF NOT EXISTS notificaciones (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  tipo VARCHAR(50) NOT NULL,
+  titulo VARCHAR(255) NOT NULL,
+  mensaje TEXT NOT NULL,
+  carta_id UUID REFERENCES cartas(id) ON DELETE SET NULL,
+  leida BOOLEAN DEFAULT FALSE,
+  fecha_creacion TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  fecha_lectura TIMESTAMP WITH TIME ZONE
+);
+
+-- Índices adicionales
+CREATE INDEX IF NOT EXISTS idx_notificaciones_usuario_id ON notificaciones(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_notificaciones_leida ON notificaciones(leida);
+CREATE INDEX IF NOT EXISTS idx_notificaciones_carta_id ON notificaciones(carta_id);
+
+-- Comentarios sobre las tablas
+COMMENT ON TABLE usuarios IS 'Tabla de usuarios del sistema (estudiantes, coordinadores, administradores)';
+COMMENT ON TABLE cartas IS 'Tabla de cartas para prácticas profesionales (A: Presentación, B: Aceptación, C: Cumplimiento, D: Liberación)';
+COMMENT ON TABLE notificaciones IS 'Tabla de notificaciones para usuarios';
+
 COMMENT ON COLUMN cartas.tipo IS 'Tipo de carta: A=Presentación, B=Aceptación, C=Cumplimiento, D=Liberación';
-COMMENT ON COLUMN cartas.estado IS 'Estado de la carta: pendiente, enviada, revisada, aprobada, rechazada';
+COMMENT ON COLUMN cartas.estado IS 'Estado de la carta: pendiente, enviando, en_proceso, recibido, revisada, aprobada, rechazada';
+COMMENT ON COLUMN cartas.archivo_url IS 'URL del archivo subido (para carta C) o generado (para cartas B y D)';
+COMMENT ON COLUMN cartas.archivo_nombre IS 'Nombre original del archivo';
 

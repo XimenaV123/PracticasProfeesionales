@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import cartaRoutes from "./routes/cartaRoutes.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
+import notificacionRoutes from "./routes/notificacionRoutes.js";
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.use("/api/cartas", cartaRoutes);
 
 // Rutas de usuarios
 app.use("/api/usuarios", usuarioRoutes);
+
+// Rutas de notificaciones
+app.use("/api/notificaciones", notificacionRoutes);
 
 // Manejo de errores 404
 app.use((req, res) => {
