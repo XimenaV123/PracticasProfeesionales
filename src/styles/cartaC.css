@@ -1,0 +1,28 @@
+.carta-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 2rem;
+  width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.carta-container input[type="file"] {
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.send-btn {
+  width: 100%;
+  margin-top: 1rem;
+  background: #1c1f3b;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+}
+
+.send-btn:hover {
+  background: #2d325a;
+}

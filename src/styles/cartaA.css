@@ -1,0 +1,35 @@
+.carta-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 2rem;
+  width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.carta-container input,
+.carta-container textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.carta-container textarea {
+  height: 120px;
+  resize: none;
+}
+
+.send-btn {
+  width: 100%;
+  background: #1c1f3b;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+}
+
+.send-btn:hover {
+  background: #2d325a;
+}

@@ -1,0 +1,15 @@
+.footer-uaq {
+  width: 100%;
+  background-color: #1c1f3b; /* Azul institucional */
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-top: 4px solid #c9a75b; /* Línea dorada */
+  font-size: 0.95rem;
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.15);
+}
+
+.footer-uaq p {
+  margin: 2px 0;
+}

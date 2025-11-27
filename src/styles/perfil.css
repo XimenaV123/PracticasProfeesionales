@@ -1,0 +1,33 @@
+.profile-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 2rem;
+  width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.profile-container p {
+  margin-bottom: 0.8rem;
+}
+
+.profile-container input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.edit-btn, .save-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #1c1f3b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+.edit-btn:hover, .save-btn:hover {
+  background: #2d325a;
+}

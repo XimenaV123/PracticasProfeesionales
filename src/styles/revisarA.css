@@ -1,0 +1,46 @@
+.admin-review-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 2rem;
+  width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.admin-review-container ul {
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.approve-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #1f9d55;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.approve-btn:hover {
+  background: #187a42;
+}
+
+.reject-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #ff4b4b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+.reject-btn:hover {
+  background: #d93b3b;
+}
+
+.admin-review-container {
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+}
