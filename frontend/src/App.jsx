@@ -1,64 +1,37 @@
 import React from "react";
-import "./styles/Home.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import DashboardP from "./pages/practicante/DashboardP";
+import CartaA from "./pages/practicante/CartaA";
+import CartaC from "./pages/practicante/CartaC";
+import Perfil from "./pages/practicante/Perfil";
+import DashboardA from "./pages/admin/DashboardA";
+import RevisarCartaA from "./pages/admin/RevisarCartaA";
+import RevisarCartaC from "./pages/admin/RevisarCartaC";
 
-/* Exportar datos de la BD */
-export default function Home() {
-  const user = {
-    expediente: "12345",
-    nombre: "Ximena Valdez",
-    curp: "VAPX950101MXN",
-    carrera: "Software",
-    semestre: 5,
-    imss: "1324567878",
-    telefono: "4426783912",
-    email: "ximena@example.com",
-    fechaNacimiento: "2001-01-01",
-  };
-
+function App() {
   return (
-    <div className="container">
-      {/* Panel Izquierdo */}
-      <aside className="sidebar">
-        <div className="profile">
-          <img src="/profile.png" alt="Foto de perfil" className="profile-img" />
-          <div className="info">
-            <p><strong>EXPEDIENTE:</strong> {user.expediente}</p>
-            <p><strong>NOMBRE:</strong> {user.nombre}</p>
-            <p><strong>CURP:</strong> {user.curp}</p>
-            <p><strong>CARRERA:</strong> {user.carrera}</p>
-            <p><strong>SEMESTRE:</strong> {user.semestre}</p>
-            <p><strong>IMSS:</strong> {user.imss}</p>
-            <p><strong>TELÉFONO:</strong> {user.telefono}</p>
-            <p><strong>EMAIL:</strong> {user.email}</p>
-            <p><strong>FECHA NAC.:</strong> {user.fechaNacimiento}</p>
-          </div>
-        </div>
-
-        <button className="logout">Cerrar sesión</button>
-      </aside>
-
-       <div className="main-content">
-        <h1>DOCUMENTOS PARA PRÁCTICAS PROFESIONALES</h1>
-
-        <div className="document-list">
-          <div className="document">
-            <span>CARTA A</span>
-            <button  className="primary">Carta de Presentación</button>
-          </div>
-          <div className="document">
-            <span>CARTA B</span>
-            <button  className="primary">Carta de Aceptación</button>
-          </div>
-          <div className="document">
-            <span>CARTA C</span>
-            <button  className="primary">Carta de Cumplimiento</button>
-          </div>
-          <div className="document">
-            <span>CARTA D</span>
-            <button  className="primary">Carta de Liberación</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Ruta por defecto: redirigir a login */}
+        <Route path="/" element={<Login />} />
+        
+        {/* Rutas de practicante */}
+        <Route path="/practicante/dashboard" element={<DashboardP />} />
+        <Route path="/practicante/cartaA" element={<CartaA />} />
+        <Route path="/practicante/cartaC" element={<CartaC />} />
+        <Route path="/practicante/perfil" element={<Perfil />} />
+        
+        {/* Rutas de administrador */}
+        <Route path="/admin/dashboard" element={<DashboardA />} />
+        <Route path="/admin/revisarCartaA/:cartaId" element={<RevisarCartaA />} />
+        <Route path="/admin/revisarCartaC/:cartaId" element={<RevisarCartaC />} />
+        
+        {/* Ruta catch-all: redirigir a login si no se encuentra */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
+export default App;

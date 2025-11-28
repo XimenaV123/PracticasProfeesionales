@@ -1,51 +1,42 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import FooterInstitucional from "../components/FooterInstitucional";
-import { supabase } from "../supabaseClient";
+import { login } from "../services/authService";
 
 
 export default function Login() {
   const navigate = useNavigate();
 
 
-  // Conexión a SUPABASE
+  // Conexión al backend mediante fetch
 const handleLogin = async (e) => {
   e.preventDefault();
 
   const expediente = e.target.expediente.value.trim();
-  const password = e.target.password.value.trim();
+  const contraseña = e.target.password.value.trim();
 
-  console.log("Intentando login:", { expediente, password });
+  console.log("Intentando login:", { expediente });
 
   try {
-    const { data, error, status } = await supabase
-      .from("Usuarios")
-      .select("*")
-      .eq("expediente", expediente)
-      .eq("password", password)
-      .maybeSingle(); // <- no arroja error si no hay fila
+    const response = await login(expediente, contraseña);
 
-    console.log("Supabase response:", { status, data, error });
+    console.log("Login exitoso:", response);
 
-    if (error) {
-      // muestra detalle al usuario y en consola
-      alert("Error al consultar credenciales. Revisa consola.");
-      console.error("Supabase error detail:", error);
-      return;
+    // Redirigir según el rol del usuario
+    if (response.user) {
+      const rol = response.user.rol || response.user.tipo_usuario;
+      if (rol === "admin" || rol === "administrador") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/practicante/dashboard");
+      }
+    } else {
+      alert("Error: No se recibieron datos del usuario");
     }
-
-    if (!data) {
-      alert("Credenciales incorrectas (usuario/contraseña no encontrados)");
-      return;
-    }
-
-    // OK: usuario encontrado
-    if (data.tipo_usuario === "admin") navigate("/admin/dashboard");
-    else navigate("/practicante/dashboard");
 
   } catch (err) {
-    console.error("Excepción en handleLogin:", err);
-    alert("Ocurrió un error inesperado. Revisa la consola.");
+    console.error("Error en login:", err);
+    alert(err.message || "Error al iniciar sesión. Verifica tus credenciales.");
   }
 };
 
