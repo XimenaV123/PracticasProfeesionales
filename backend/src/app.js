@@ -8,7 +8,12 @@ import notificacionRoutes from "./routes/notificacionRoutes.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000', // URL del frontend
+  credentials: true, // Permitir cookies si las usas
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Rutas
